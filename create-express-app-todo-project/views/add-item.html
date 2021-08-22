@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Compiled and minified CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+    />
+    <!--Import Google Icon Font-->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <title>Document</title>
+  </head>
+  <body>
+    <nav>
+      <div class="nav-wrapper container">
+        <a href="#" class="brand-logo">CRUD</a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
+          <li><a href="add-item">Add Items</a></li>
+        </ul>
+      </div>
+    </nav>
+    <div class="container">
+      <div class="row">
+        <form class="col s12">
+          <div class="row">
+            <div class="input-field col s6">
+              <i class="material-icons prefix">shopping_cart</i>
+              <input id="item_name" name="name" type="text" class="validate" />
+              <label for="item_name">Item Name</label>
+            </div>
+            <div class="input-field col s6">
+              <i class="material-icons prefix">request_quote</i>
+              <input id="price" name="price" type="tel" class="validate" />
+              <label for="price">Price</label>
+            </div>
+          </div>
+          <button class="btn">Add Item</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
