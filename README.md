@@ -20,3 +20,5 @@
 ps :Like ASP.net other some frameworks works in synchronous architect which make them unsalable.(but you can make the asp.net async but need extra work.)
 
 This makes node an ideal tool for I/O-intensive apps that have a lot of requests.But node is not used for CPU-intensive apps (like apps requires calculations , and videos ...)
+
+![how-node-works](./how-node-works.png)
