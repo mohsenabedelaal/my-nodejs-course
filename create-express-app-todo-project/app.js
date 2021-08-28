@@ -1,9 +1,9 @@
 const express = require("express");
+const mongodbUrl = require("./env");
 const app = express();
 const mongoose = require("mongoose");
 const Item = require("./models/items");
-const mongodb =
-  "mongodb+srv://mohsen:mohsen.abedelaal.92@cluster0.cenyy.mongodb.net/items-database?retryWrites=true&w=majority";
+const mongodb = mongodbUrl;
 mongoose
   .connect(mongodb, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
