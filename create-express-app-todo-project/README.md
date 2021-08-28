@@ -17,4 +17,6 @@ EJS snippets:
 
 # What is Mongodb
 
+![node.js-architecture](./MongoDB-chart1.jpg)
+
 - It is a NoSQL database schemaless and uses JSON-like documents with optional schema , in other words **it is a document database with the scalability and flexibility that you want with the querying and indexing that you need**.
