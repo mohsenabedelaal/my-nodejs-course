@@ -1,6 +1,8 @@
 const express = require("express");
 const mongodbUrl = require("./env");
 const app = express();
+/* use urlencoded to parse body variables (TEXT INPUTS) that are sent */
+app.use(express.urlencoded({ extended: true }));
 const mongoose = require("mongoose");
 const Item = require("./models/items");
 const mongodb = mongodbUrl;
@@ -56,6 +58,38 @@ app.get("/get-item", (req, res) => {
 app.get("/add-item", (req, res) => {
   // res.sendFile("./views/add-item.html", { root: __dirname });
   res.render("add-item");
+});
+
+app.post("/items", (req, res) => {
+  // console.log(req.body);
+  const item = new Item(req.body);
+  item
+    .save()
+    .then(() => res.redirect("/"))
+    .catch((err) => res.redirect("error"));
+});
+
+app.get("/item/:id", (req, res) => {
+  console.log(req.params);
+  const { id } = req.params;
+  const item = Item.findById(id).then((result) => {
+    console.log(result);
+    res.render("item-details", { item: result });
+  });
+});
+
+app.delete("/item/:id", (req, res) => {
+  const { id } = req.params;
+  const item = Item.findByIdAndDelete(id).then((result) => {
+    res.json({ redirect: "/get-items" });
+  });
+});
+
+app.put("/item/:id", (req, res) => {
+  const { id } = req.params;
+  const item = Item.findByIdAndUpdate(id, req.body).then((result) => {
+    res.json({ msg: "Updated Successfully" });
+  });
 });
 app.use((req, res) => {
   // res.sendFile("./views/error.html", { root: __dirname });

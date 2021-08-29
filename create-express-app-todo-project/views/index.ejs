@@ -3,15 +3,22 @@
   <%- include("./partials/head.ejs") %>
   <body>
     <%- include("./partials/nav.ejs") %>
-    <div class="container">
+    <div id="itemContainer" class="container">
       <ul class="collection with-header">
         <% if(items.length > 0){ %> <% items.forEach((item) => { %>
         <li class="collection-item">
           <div>
-            <%= item.name %> $<%= item.price %>
+            <a href="/item/<%= item._id %>"
+              ><%= item.name %> $<%= item.price %></a
+            >
             <a href="#!" class="secondary-content">
-              <i class="material-icons">delete</i>
-              <i class="material-icons">edit</i>
+              <i class="material-icons" data-id="<%= item._id %>">delete</i>
+              <i
+                class="material-icons modal-trigger"
+                data-id="<%= item._id %>"
+                href="#edit_item_modal"
+                >edit</i
+              >
             </a>
           </div>
         </li>
@@ -20,5 +27,69 @@
         <% } %>
       </ul>
     </div>
+    <div id="edit_item_modal" class="modal">
+      <div class="modal-content">
+        <h4>Edit Form</h4>
+        <form id="edit_form" action="">
+          <input type="text" name="name" placeholder="item name" />
+          <input type="number" name="price" placeholder="item price" />
+          <button class="btn">Update</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat"
+          >Agree</a
+        >
+      </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <script>
+      var updateId;
+      document.addEventListener("DOMContentLoaded", function () {
+        var elems = document.querySelectorAll(".modal");
+        var instances = M.Modal.init(elems);
+      });
+
+      edit_form.onsubmit = async function (e) {
+        e.preventDefault();
+        let data = new FormData(edit_form);
+        /* how to iterate over the data from the formdata */
+        // for (var pair of data.entries()) {
+        //   console.log(pair[0] + "," + pair[1]);
+        // }
+        let response = await fetch(`/item/${updateId}`, {
+          method: "PUT", // 'GET', 'PUT', 'DELETE', etc.
+          body: new URLSearchParams(data),
+          headers: new Headers({
+            "Content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+          }),
+        });
+        let result = await response.json();
+        edit_form.reset();
+        window.location.reload();
+        alert(result.msg);
+      };
+
+      itemContainer.onclick = async function (e) {
+        if (e.target.textContent === "edit") {
+          const id = e.target.getAttribute("data-id");
+          updateId = id;
+        }
+        if (e.target.textContent === "delete") {
+          const id = e.target.getAttribute("data-id");
+          updateId = id;
+          try {
+            let response = await fetch(`/item/${updateId}`, {
+              method: "DELETE",
+            });
+
+            window.location.reload();
+            alert("Item Deleted Successfully");
+          } catch (err) {
+            console.log(err);
+          }
+        }
+      };
+    </script>
   </body>
 </html>
