@@ -1,9 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../../UserContext";
+import RoomList from "./RoomList";
+import io from "socket.io-client";
 
+let socket;
 function Home() {
+  const ENDPT = "http://localhost:5000";
+
+  useEffect(() => {
+    socket = io(ENDPT, {
+      transports: ["websocket", "polling"], // use WebSocket first, if available
+    });
+
+    // return () => {
+    //   cleanup
+    // }
+  }, [ENDPT]);
+
   const { user, setUser } = useContext(UserContext);
+  const [room, setRoom] = useState("");
+  const rooms = [
+    {
+      name: "room1",
+      _id: "123",
+    },
+    {
+      name: "room2",
+      _id: "456",
+    },
+  ];
   const setAsJohn = () => {
     const john = {
       name: "John",
@@ -22,6 +48,12 @@ function Home() {
     };
     setUser(tom);
   };
+  const createRoom = (e) => {
+    e.preventDefault();
+    socket.emit("create-room", room);
+    console.log(room);
+    setRoom("");
+  };
   return (
     <div>
       <div className="row">
@@ -31,10 +63,12 @@ function Home() {
               <span className="card-title">
                 Welcome {user ? user.name : ""}
               </span>
-              <form>
+              <form onSubmit={createRoom}>
                 <div className="row">
                   <div className="input-field col s12">
                     <input
+                      value={room}
+                      onChange={(e) => setRoom(e.target.value)}
                       placeholder="Enter a room name"
                       id="room"
                       type="text"
@@ -55,6 +89,9 @@ function Home() {
               </a>
             </div>
           </div>
+        </div>
+        <div className="col s6 m5 offset-1">
+          <RoomList rooms={rooms} />
         </div>
       </div>
 
