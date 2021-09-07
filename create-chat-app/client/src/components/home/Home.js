@@ -51,7 +51,6 @@ function Home() {
   const createRoom = (e) => {
     e.preventDefault();
     socket.emit("create-room", room);
-    console.log(room);
     setRoom("");
   };
   return (
