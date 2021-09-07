@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Preloader from "./components/Preloader";
-import { createTodos, readTodos } from "./functions";
+import { createTodos, deleteTodo, readTodos, updateTodo } from "./functions";
 
 function App() {
   const [todo, setTodo] = useState({ title: "", content: "" });
@@ -30,14 +30,35 @@ function App() {
       setTodos(result);
     };
     fetchData();
-  }, []);
+  }, [currentId]);
   const clear = () => {
     setCurrentId(0);
+    setTodo({ title: "", content: "" });
   };
   const submitHandler = async (e) => {
     e.preventDefault();
-    const result = await createTodos(todo);
-    setTodos([...todos, result]);
+    if (currentId === 0) {
+      const result = await createTodos(todo);
+      setTodos([...todos, result]);
+    } else {
+      await updateTodo(currentId, todo);
+
+      // const newTodoList = todos.map((currnetTodo) => {
+      //   if (currnetTodo._id === currentId) {
+      //     currnetTodo = todo;
+      //   }
+      //   return currnetTodo;
+      // });
+
+      // setTodos([...newTodoList]);
+    }
+    clear();
+  };
+  const removeTodo = async (id) => {
+    await deleteTodo(id);
+    const todosCopy = [...todos];
+    todosCopy.filter((todo) => todo._id !== id);
+    setTodos(todosCopy);
   };
   return (
     <div className="container">
@@ -86,7 +107,11 @@ function App() {
                   <h5>{todo.title}</h5>
                   <p>
                     {todo.content}
-                    <a href="#!" className="secondary-content">
+                    <a
+                      href="#!"
+                      className="secondary-content"
+                      onClick={() => removeTodo(todo._id)}
+                    >
                       <i className="material-icons">delete</i>
                     </a>
                   </p>

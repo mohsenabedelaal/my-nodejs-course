@@ -19,3 +19,25 @@ export const createTodo = async (req, res) => {
     res.status(409).json({ error: error.message });
   }
 };
+
+export const updateTodo = async (req, res) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+  // or mongoose.Types.ObjectId.isValid(id)
+  if (!mongoose.isValidObjectId(id)) {
+    return res.state(404).send(`this id ${id} is not valid`);
+  }
+  const todo = { title, content, _id: id };
+  await Todo.findByIdAndUpdate(id, todo, { new: true });
+  res.json(todo);
+};
+
+export const deleteTodo = async (req, res) => {
+  const { id } = req.params;
+  // or mongoose.Types.ObjectId.isValid(id)
+  if (!mongoose.isValidObjectId(id)) {
+    return res.state(404).send(`this id ${id} is not valid`);
+  }
+  await Todo.findByIdAndRemove(id);
+  res.json({ message: "Todo delete successfully" });
+};
