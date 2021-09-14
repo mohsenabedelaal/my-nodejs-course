@@ -15,7 +15,7 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
-            <Route exact path="/chat" component={Chat} />
+            <Route exact path="/chat/:room_id/:room_name" component={Chat} />
           </Switch>
         </UserContext.Provider>
       </div>

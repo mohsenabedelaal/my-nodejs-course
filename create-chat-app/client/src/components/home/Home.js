@@ -13,23 +13,19 @@ function Home() {
       transports: ["websocket", "polling"], // use WebSocket first, if available
     });
 
-    // return () => {
-    //   cleanup
-    // }
+    return () => {
+      socket.disconnect();
+    };
   }, [ENDPT]);
 
   const { user, setUser } = useContext(UserContext);
   const [room, setRoom] = useState("");
-  const rooms = [
-    {
-      name: "room1",
-      _id: "123",
-    },
-    {
-      name: "room2",
-      _id: "456",
-    },
-  ];
+  const [rooms, setRooms] = useState([]);
+  useEffect(() => {
+    socket.on("room-created", (room) => {
+      setRooms([...rooms, room]);
+    });
+  }, [rooms]);
   const setAsJohn = () => {
     const john = {
       name: "John",
@@ -53,6 +49,7 @@ function Home() {
     socket.emit("create-room", room);
     setRoom("");
   };
+
   return (
     <div>
       <div className="row">
