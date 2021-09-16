@@ -12,6 +12,7 @@ mongoose
   .catch((err) => console.log(err));
 const PORT = process.env.PORT || 5000;
 const Room = require("./models/Room.js");
+const Message = require("./models/Message");
 const io = require("socket.io")(httpServer, {
   cors: {
     origin: "*",
@@ -20,10 +21,20 @@ const io = require("socket.io")(httpServer, {
 
 io.on("connection", (socket) => {
   console.log("a user connected");
+  Room.find().then((result) => {
+    // console.log("output-rooms", result);
+    socket.emit("output-rooms", result);
+  });
   socket.on("create-room", (name) => {
     // console.log("The room name received is " + name);
     const room = new Room({ name });
     room.save().then((result) => io.emit("room-created", result));
+  });
+
+  socket.on("room-chat-messages", (room_id, callback) => {
+    Message.find({ room_id: room_id }).then((result) => {
+      callback(result);
+    });
   });
   socket.on("join", ({ name, user_id, room_id }) => {
     const { error, user } = addUser({
@@ -47,9 +58,12 @@ io.on("connection", (socket) => {
       room_id,
       text: message,
     };
-    console.log("message", msgToStore);
-    io.to(room_id).emit("message", msgToStore);
-    callback();
+    // console.log("message", msgToStore);
+    const msg = new Message(msgToStore);
+    msg.save().then((result) => {
+      io.to(room_id).emit("message", result);
+      callback();
+    });
   });
   socket.on("disconnect", () => {
     const user = removeUser(socket.id);
