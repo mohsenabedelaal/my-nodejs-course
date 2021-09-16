@@ -1,6 +1,9 @@
 const { addUser, getUser, removeUser } = require("./helper");
-
-const app = require("express")();
+const express = require("express");
+const app = express();
+const authRoutes = require("./routes/authRoutes");
+app.use(express.json());
+app.use(authRoutes);
 const httpServer = require("http").createServer(app);
 const dotenv = require("dotenv");
 const mongoose = require("mongoose");

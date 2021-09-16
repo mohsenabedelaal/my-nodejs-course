@@ -13,10 +13,10 @@ const Navbar = () => {
           </a>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
             <li>
-              <a href="#">Login</a>
+              <a href="/login">Login</a>
             </li>
             <li>
-              <a href="#">Signup</a>
+              <a href="/signup">Signup</a>
             </li>
             <li>
               <a href="#">Logout</a>
@@ -26,10 +26,10 @@ const Navbar = () => {
       </nav>
       <ul class="sidenav" id="mobile-demo">
         <li>
-          <a href="sass.html">Login</a>
+          <a href="/login">Login</a>
         </li>
         <li>
-          <a href="badges.html">Signup</a>
+          <a href="/signup">Signup</a>
         </li>
         <li>
           <a href="collapsible.html">Logout</a>

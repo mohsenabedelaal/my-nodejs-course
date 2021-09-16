@@ -22,6 +22,10 @@ function Home() {
   const [room, setRoom] = useState("");
   const [rooms, setRooms] = useState([]);
   useEffect(() => {
+    socket.on("output-rooms", (rooms) => setRooms(rooms));
+  }, []);
+
+  useEffect(() => {
     socket.on("room-created", (room) => {
       setRooms([...rooms, room]);
     });

@@ -5,6 +5,8 @@ import Chat from "./components/chat/Chat";
 import Home from "./components/home/Home";
 import { useState } from "react";
 import Navbar from "./components/layout/Navbar";
+import Login from "./components/auth/Login";
+import Signup from "./components/auth/Signup";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -15,6 +17,8 @@ function App() {
           <Navbar />
           <Switch>
             <Route exact path="/" component={Home} />
+            <Route exact path="/signup" component={Signup} />
+            <Route exact path="/login" component={Login} />
             <Route exact path="/chat/:room_id/:room_name" component={Chat} />
           </Switch>
         </UserContext.Provider>
