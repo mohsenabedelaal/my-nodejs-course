@@ -1,8 +1,10 @@
 const { addUser, getUser, removeUser } = require("./helper");
+const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
 const authRoutes = require("./routes/authRoutes");
 app.use(express.json());
+app.use(cookieParser());
 app.use(authRoutes);
 const httpServer = require("http").createServer(app);
 const dotenv = require("dotenv");
@@ -20,6 +22,20 @@ const io = require("socket.io")(httpServer, {
   cors: {
     origin: "*",
   },
+});
+app.get("/set-cookies", (req, res) => {
+  // set secure so is will be hidden from the dev tools
+  res.cookie("username", "Tony", { secure: true });
+  // set httponly so we cannot access the cookies from the console log
+  res.cookie("isAuthenticated", true, { httpOnly: true });
+  // you can set a maxAge for the cookie h min sec msec
+  res.cookie("token", "this-is-the-token", { maxAge: 24 * 60 * 60 * 1000 });
+  res.send("cookies are set");
+});
+app.get("/get-cookies", (req, res) => {
+  const cookies = req.cookies;
+
+  res.json(cookies);
 });
 
 io.on("connection", (socket) => {
