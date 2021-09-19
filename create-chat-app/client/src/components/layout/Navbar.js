@@ -1,5 +1,7 @@
 import React, { useContext } from "react";
 import { UserContext } from "../../UserContext";
+import SignedInMenu from "./SignedInMenu";
+import SignedOutMenu from "./SignedOutMenu";
 const Navbar = () => {
   const { user, setUser } = useContext(UserContext);
 
@@ -14,6 +16,7 @@ const Navbar = () => {
       console.log(error);
     }
   };
+  const menu = user ? <SignedInMenu logout={logout} /> : <SignedOutMenu />;
   return (
     <>
       <nav className="green">
@@ -25,28 +28,12 @@ const Navbar = () => {
             <i class="material-icons">menu</i>
           </a>
           <ul id="nav-mobile" className="right hide-on-med-and-down">
-            <li>
-              <a href="/login">Login</a>
-            </li>
-            <li>
-              <a href="/signup">Signup</a>
-            </li>
-            <li onClick={logout}>
-              <a href="#">Logout</a>
-            </li>
+            {menu}
           </ul>
         </div>
       </nav>
       <ul class="sidenav" id="mobile-demo">
-        <li>
-          <a href="/login">Login</a>
-        </li>
-        <li>
-          <a href="/signup">Signup</a>
-        </li>
-        <li onClick={logout}>
-          <a href="#">Logout</a>
-        </li>
+        {menu}
       </ul>
     </>
   );
