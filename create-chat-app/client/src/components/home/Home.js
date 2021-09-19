@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { UserContext } from "../../UserContext";
 import RoomList from "./RoomList";
 import io from "socket.io-client";
@@ -53,7 +53,9 @@ function Home() {
     socket.emit("create-room", room);
     setRoom("");
   };
-
+  if (!user) {
+    return <Redirect to="/login" />;
+  }
   return (
     <div>
       <div className="row">
@@ -94,10 +96,6 @@ function Home() {
           <RoomList rooms={rooms} />
         </div>
       </div>
-
-      <Link to={"/chat"}>
-        <button>go to chat</button>
-      </Link>
     </div>
   );
 }

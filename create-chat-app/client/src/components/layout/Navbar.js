@@ -1,6 +1,19 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import { UserContext } from "../../UserContext";
 const Navbar = () => {
+  const { user, setUser } = useContext(UserContext);
+
+  const logout = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/logout", {
+        credentials: "include",
+      });
+      const data = res.json();
+      setUser(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <>
       <nav className="green">
@@ -18,7 +31,7 @@ const Navbar = () => {
             <li>
               <a href="/signup">Signup</a>
             </li>
-            <li>
+            <li onClick={logout}>
               <a href="#">Logout</a>
             </li>
           </ul>
@@ -31,8 +44,8 @@ const Navbar = () => {
         <li>
           <a href="/signup">Signup</a>
         </li>
-        <li>
-          <a href="collapsible.html">Logout</a>
+        <li onClick={logout}>
+          <a href="#">Logout</a>
         </li>
       </ul>
     </>

@@ -17,7 +17,7 @@ function Chat() {
   useEffect(() => {
     // console.log(user);
     socket = io(ENDPT);
-    socket.emit("join", { name: user.name, room_id, user_id: user.id });
+    socket.emit("join", { name: user.name, room_id, user_id: user._id });
     socket.emit("room-chat-messages", room_id, (messages) =>
       setMessages(messages)
     );
@@ -39,7 +39,7 @@ function Chat() {
       <div className="container">
         {/* <h1>Chat {JSON.stringify(user)}</h1> */}
         {/* <pre>{JSON.stringify(messages, null, "\t")}</pre> */}
-        <Messages messages={messages} user_id={user.id} />
+        <Messages messages={messages} user_id={user._id} />
         <Input
           message={message}
           sendMessage={sendMessage}

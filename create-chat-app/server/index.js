@@ -2,7 +2,14 @@ const { addUser, getUser, removeUser } = require("./helper");
 const cookieParser = require("cookie-parser");
 const express = require("express");
 const app = express();
+const cors = require("cors");
+const corsOptions = {
+  origin: ["http://localhost:3000"],
+  credentials: true,
+  optionsSuccessStatus: 200,
+};
 const authRoutes = require("./routes/authRoutes");
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
 app.use(authRoutes);

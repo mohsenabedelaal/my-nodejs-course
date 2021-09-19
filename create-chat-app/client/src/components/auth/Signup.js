@@ -1,18 +1,50 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
+import { UserContext } from "../../UserContext";
+import { Redirect } from "react-router-dom";
 const Signup = () => {
+  const { user, setUser } = useContext(UserContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
-  const submitHandler = (e) => {
+
+  const submitHandler = async (e) => {
     e.preventDefault();
-    alert(name + " " + email + " " + password);
+    // alert(name + " " + email + " " + password);
+    setNameError("");
+    setEmailError("");
+    setPasswordError("");
+    try {
+      let res = await fetch("http://localhost:5000/signup", {
+        method: "POST",
+        credentials: "include", // to be able to set cookie from the backend
+        body: JSON.stringify({ name, email, password }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      console.log(data);
+      if (data.errors) {
+        setNameError(data.errors.name);
+        setEmailError(data.errors.email);
+        setPasswordError(data.errors.password);
+      }
+      if (data.user) {
+        setUser(data.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
+  if (user) {
+    return <Redirect to="/" />;
+  }
   return (
     <div className="row">
+      <h2>Sign Up</h2>
       <form className="col s12" onSubmit={submitHandler}>
         <div className="row">
           <div className="input-field col s12">
@@ -24,7 +56,7 @@ const Signup = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <div className="name error red-text">h</div>
+            <div className="name error red-text">{nameError}</div>
             <label htmlFor="name">Name</label>
           </div>
         </div>
@@ -37,7 +69,7 @@ const Signup = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <div className="email error red-text">h</div>
+            <div className="email error red-text">{emailError}</div>
             <label htmlFor="email">Email</label>
           </div>
         </div>
@@ -50,7 +82,7 @@ const Signup = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <div className="password error red-text">h</div>
+            <div className="password error red-text">{passwordError}</div>
             <label htmlFor="password">Password</label>
           </div>
         </div>
